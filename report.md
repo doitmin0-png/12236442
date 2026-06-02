@@ -36,15 +36,15 @@ RANSAC은 이상치 앵커를 제거하는 데 효과적이었고, WLS는 거리
 
 이후 원본 거리값뿐만 아니라 다음과 같은 feature를 추가하였다.
 
-Feature 종류, 설명
-원본 RTT 거리값: 18개 기지국에서 측정된 사용자별 거리 정보   
-정렬된 RTT 거리값: 앵커 순서와 무관한 거리 분포 반영 
-RTT 통계값: 평균, 표준편차, 최솟값, 최댓값, 중앙값, 사분위수 
-Weighted centroid 좌표: 가까운 앵커에 높은 가중치를 부여한 초기 위치  
-RANSAC/WLS 위치 좌표: 이상치 제거와 가중최소제곱 기반 초기 위치
-Inlier ratio: RANSAC에서 정상치로 판단된 앵커 비율 
-Residual feature: 예측 거리와 측정 거리의 차이 정보  
-가까운 앵커 index: 거리값이 작은 상위 앵커 정보 
+Feature 종류 | 설명
+원본 RTT 거리값 | 18개 기지국에서 측정된 사용자별 거리 정보   
+정렬된 RTT 거리값 | 앵커 순서와 무관한 거리 분포 반영 
+RTT 통계값 | 평균, 표준편차, 최솟값, 최댓값, 중앙값, 사분위수 
+Weighted centroid 좌표 | 가까운 앵커에 높은 가중치를 부여한 초기 위치  
+RANSAC/WLS 위치 좌표 | 이상치 제거와 가중최소제곱 기반 초기 위치
+Inlier ratio | RANSAC에서 정상치로 판단된 앵커 비율 
+Residual feature | 예측 거리와 측정 거리의 차이 정보  
+가까운 앵커 index | 거리값이 작은 상위 앵커 정보 
 
 Weighted centroid는 가까운 앵커일수록 더 큰 영향을 주도록 거리의 역제곱을 가중치로 사용하였다.
 이는 실제 사용자 위치와 가까운 앵커의 거리 정보가 상대적으로 더 신뢰도 높을 가능성이 있기 때문이다.
@@ -80,15 +80,7 @@ main.py에서는 학습을 다시 수행하지 않는다.
 
 이후 AI를 이용해 논문 제목, 초록, 핵심 내용을 한국어로 번역하고 요약하였다.
 그 과정에서 과제와 직접 관련성이 낮은 논문은 제외하였다.
-예를 들어 단순히 센서 종류만 비슷하거나, 딥러닝 구조가 너무 복잡하여 본 과제 데이터 규모와 맞지 않는 논문은 최종 reference에서 제외하였다.
-
-최종적으로는 다음 기준으로 참고문헌을 선택하였다.
-                                                                           
-최근성: 되도록 최근 10년 안쪽 논문을 우선 선택                                                           
-과제 관련성: RTT, UWB, WiFi FTM, NLOS, indoor positioning과 관련 있는 논문 선택                         
-구현 연결성: RANSAC, WLS, residual, ML feature, Random Forest, Gradient Boosting과 연결 가능한 논문 선택 
-이해 가능성: 대학교 3학년 수준에서 읽고 이해할 수 있는 논문 우선 선택                                                 
-접근성: 링크를 통해 논문 정보 또는 원문을 확인할 수 있는 자료 우선 선택                                             
+예를 들어 단순히 센서 종류만 비슷하거나, 딥러닝 구조가 너무 복잡하여 본 과제 데이터 규모와 맞지 않는 논문은 최종 reference에서 제외하였다.                                           
 
 또한 main.py 작성 규격을 해석하는 과정에서도 AI를 활용하였다.
 처음에는 scikit-learn 모델의 일반적인 사용 방식에 맞추어 전체 사용자 데이터를 한 번에 예측하는 구조를 검토하였다.
@@ -110,10 +102,10 @@ train.py에서는 전체 데이터를 학습용과 검증용으로 나누고, Ri
 
 세 모델은 동일한 feature를 사용하도록 하여 모델 간 비교가 최대한 공정하게 이루어지도록 하였다.
 
-모델, 검증 평균 위치 오차
-Ridge Regression, 7.094207 
-Random Forest Regressor, 7.064307 
-Gradient Boosting Regressor, 6.046496 
+모델 | 검증 평균 위치 오차
+Ridge Regression | 7.094207 
+Random Forest Regressor | 7.064307 
+Gradient Boosting Regressor | 6.046496 
 
 검증 결과 Gradient Boosting Regressor가 세 모델 중 가장 낮은 평균 위치 오차를 보였다.
 Ridge Regression은 선형 모델이기 때문에 RTT 데이터의 비선형 오차를 충분히 반영하기 어려웠다.
@@ -126,11 +118,11 @@ main.py에서는 이 model.pkl을 불러와 각 사용자별로 위치를 예측
 
 Colab에서 main.py를 실행한 결과는 다음과 같다.
 
-항목, 결과
-반환 자료형, numpy.ndarray
-반환 shape, (2, 700)
-main.py 실행 시간, 약 177초
-제한 시간, 600초
+항목 | 결과
+반환 자료형 | numpy.ndarray
+반환 shape | (2, 700)
+main.py 실행 시간 | 약 177초
+제한 시간 | 600초
 
 실행 시간은 약 177초로 측정되어 10분 제한을 만족하였다.
 사용자별 반복 구조를 사용했음에도 model.pkl을 매번 새로 불러오지 않고 최초 한 번만 로드하도록 구성했기 때문에 실행 시간을 줄일 수 있었다.
@@ -156,17 +148,17 @@ RANSAC/WLS는 여전히 feature 생성 과정에서 초기 위치와 residual �
 AI를 활용하여 실내 위치측위 관련 논문 후보를 먼저 찾은 뒤, 초록과 주요 내용을 번역하고 요약하였다.
 이후 본 과제와의 관련성을 기준으로 논문을 비교하였다.
 
-후보 주제, 검토 결과, 최종 사용 여부
-UWB NLOS identification survey, NLOS, residual, WLS, ML 기반 오차 완화 방법을 폭넓게 정리하고 있어 과제 배경 설명에 적합 -> 사용
-Wi-Fi FTM two-step positioning, RTT 기반 ranging과 기하학적 위치 계산 이후 보정 구조를 설명하고 있어 Hybrid 구조 근거로 적합 -> 사용
-WiFi RTT/RSS NLOS classification, RTT feature와 ML을 이용해 NLOS 패턴을 학습하는 내용이 있어 feature engineering 근거로 적합 -> 사용
-Random Forest WiFi localization,  실내 측위에서 Random Forest를 학습 모델로 사용하는 사례라 ML 모델 비교 근거로 적합 -> 사용
-Deep learning indoor localization, 구조가 복잡하고 본 과제 데이터 규모와 실행 시간 제한에 비해 과도하다고 판단 -> 일부 참고
-Gradient Boosting indoor positioning, feature augmentation과 boosting 기반 위치 예측 방향이 본 프로젝트의 최종 모델과 연결 가능 -> 사용
+후보 주제 | 검토 결과 | 최종 사용 여부
+UWB NLOS identification survey | NLOS, residual, WLS, ML 기반 오차 완화 방법을 폭넓게 정리하고 있어 과제 배경 설명에 적합 -> 사용
+Wi-Fi FTM two-step positioning | RTT 기반 ranging과 기하학적 위치 계산 이후 보정 구조를 설명하고 있어 Hybrid 구조 근거로 적합 -> 사용
+WiFi RTT/RSS NLOS classification | RTT feature와 ML을 이용해 NLOS 패턴을 학습하는 내용이 있어 feature engineering 근거로 적합 -> 사용
+Random Forest WiFi localization |  실내 측위에서 Random Forest를 학습 모델로 사용하는 사례라 ML 모델 비교 근거로 적합 -> 사용
+Deep learning indoor localization | 구조가 복잡하고 본 과제 데이터 규모와 실행 시간 제한에 비해 과도하다고 판단 -> 일부 참고
+Gradient Boosting indoor positioning | feature augmentation과 boosting 기반 위치 예측 방향이 본 프로젝트의 최종 모델과 연결 가능 -> 사용
 
 최종적으로 선택한 reference는 다음과 같다.
 
-[1] Wang et al., “Survey on NLOS Identification and Error Mitigation for UWB Indoor Positioning,” Electronics, 2023
+### [1] Wang et al., “Survey on NLOS Identification and Error Mitigation for UWB Indoor Positioning,” Electronics, 2023
 
 링크: https://www.mdpi.com/2079-9292/12/7/1678
 
@@ -179,7 +171,7 @@ Gradient Boosting indoor positioning, feature augmentation과 boosting 기반 �
 논문에서 직접 가져온 부분은 NLOS 오차가 위치 정확도를 크게 떨어뜨릴 수 있다는 문제의식과 residual/statistical feature/ML 기반 접근이 가능하다는 아이디어이다.
 본인이 직접 구현한 부분은 해당 개념을 DH_FR1.mat 데이터에 맞게 RANSAC/WLS 위치 feature, residual feature, inlier ratio feature로 변환한 것이다.
 
-[2] Xu et al., “A Two-Step Fusion Method of Wi-Fi FTM for Indoor Positioning,” Sensors, 2022
+### [2] Xu et al., “A Two-Step Fusion Method of Wi-Fi FTM for Indoor Positioning,” Sensors, 2022
 
 링크: https://www.mdpi.com/1424-8220/22/9/3593
 
@@ -192,7 +184,7 @@ Gradient Boosting indoor positioning, feature augmentation과 boosting 기반 �
 논문에서 참고한 부분은 “기하학적 positioning 이후 추가 보정 단계가 필요하다”는 전체 구조이다.
 다만 논문에서는 fusion method를 사용하였고, 본 프로젝트에서는 이를 머신러닝 기반 회귀 보정으로 바꾸었다는 차이가 있다.
 
-[3] Dong, Arslan, and Yang, “Real-Time NLOS/LOS Identification for Smartphone-Based Indoor Positioning Systems Using WiFi RTT and RSS,” IEEE Sensors Journal, 2022
+### [3] Dong, Arslan, and Yang, “Real-Time NLOS/LOS Identification for Smartphone-Based Indoor Positioning Systems Using WiFi RTT and RSS,” IEEE Sensors Journal, 2022
 
 링크: https://doi.org/10.1109/JSEN.2021.3119234
 보조 링크: https://arxiv.org/abs/2104.11316
@@ -206,7 +198,7 @@ Gradient Boosting indoor positioning, feature augmentation과 boosting 기반 �
 논문에서 참고한 부분은 RTT 기반 측위에서 NLOS 여부가 중요한 오차 원인이며, 이를 machine learning feature로 학습할 수 있다는 점이다.
 본인이 구현한 부분은 NLOS 분류 대신 최종 x, y 좌표를 예측하는 회귀 문제로 바꾸고, RANSAC/WLS residual 정보를 feature로 추가한 것이다.
 
-[4] Fan and Du, “NLOS Error Mitigation Using Weighted Least Squares and Kalman Filter in UWB Positioning,” 2022
+### [4] Fan and Du, “NLOS Error Mitigation Using Weighted Least Squares and Kalman Filter in UWB Positioning,” 2022
 
 링크: https://arxiv.org/abs/2205.05939
 
@@ -219,7 +211,7 @@ Gradient Boosting indoor positioning, feature augmentation과 boosting 기반 �
 논문에서 참고한 부분은 NLOS 환경에서 WLS가 오차 완화에 활용될 수 있다는 점이다.
 본인이 직접 구현한 부분은 Kalman Filter 대신 RANSAC과 Huber 기반 robust weighting을 결합하여 한 사용자 단위의 위치 feature를 생성한 것이다.
 
-[5] Wang et al., “WiFi Indoor Localization with CSI Fingerprinting-Based Random Forest,” Sensors, 2018
+### [5] Wang et al., “WiFi Indoor Localization with CSI Fingerprinting-Based Random Forest,” Sensors, 2018
 
 링크: https://www.mdpi.com/1424-8220/18/9/2869
 
@@ -246,7 +238,7 @@ Gradient Boosting indoor positioning, feature augmentation과 boosting 기반 �
 논문에서 참고한 부분은 indoor positioning에서 ML 모델의 성능을 평가할 때 일반화 가능성을 함께 고려해야 한다는 점이다.
 본인이 직접 구현한 부분은 동일한 feature set으로 여러 회귀 모델을 비교하고, 검증 평균 위치 오차가 가장 낮은 Gradient Boosting을 최종 선택한 것이다.
 
-[7] Goharfar et al., “Indoor Positioning via Gradient Boosting Enhanced with Feature Augmentation using Deep Learning,” 2022
+### [7] Goharfar et al., “Indoor Positioning via Gradient Boosting Enhanced with Feature Augmentation using Deep Learning,” 2022
 
 링크: https://arxiv.org/abs/2211.08752
 
@@ -271,13 +263,13 @@ Gradient Boosting indoor positioning, feature augmentation과 boosting 기반 �
 
 본 프로젝트에서 직접 구현한 부분은 다음과 같다.
 
-구분, 본인이 구현한 내용 
+구분 | 본인이 구현한 내용 
 
-데이터 처리, DH_FR1.mat의 d_hat과 BS_positions를 이용하여 사용자별 RTT feature 생성 
-기하학적 위치 추정, RANSAC과 WLS를 이용하여 초기 위치 및 residual feature 계산  
-머신러닝 학습, Ridge, Random Forest, Gradient Boosting을 동일 feature 조건에서 비교   
-최종 모델 선택, 검증 평균 위치 오차가 가장 낮았던 Gradient Boosting 선택   
-제출 구조, train.py에서 model.pkl 생성, main.py에서 model.pkl 로드 후 p_hat 반환 
-규격 대응, main() 함수, your_algorithm(d_hat[:, u], BS_positions), (2, num_user) 반환 구조 유지
+데이터 처리 | DH_FR1.mat의 d_hat과 BS_positions를 이용하여 사용자별 RTT feature 생성 
+기하학적 위치 추정 | RANSAC과 WLS를 이용하여 초기 위치 및 residual feature 계산  
+머신러닝 학습 | Ridge, Random Forest, Gradient Boosting을 동일 feature 조건에서 비교   
+최종 모델 선택 | 검증 평균 위치 오차가 가장 낮았던 Gradient Boosting 선택   
+제출 구조 | train.py에서 model.pkl 생성, main.py에서 model.pkl 로드 후 p_hat 반환 
+규격 대응 | main() 함수, your_algorithm(d_hat[:, u], BS_positions), (2, num_user) 반환 구조 유지
 
 따라서 본 프로젝트는 기존 논문을 그대로 복제한 것이 아니라, 최근 실내 측위 연구에서 공통적으로 다루는 NLOS 완화, weighted positioning, ML 기반 보정, feature engineering 아이디어를 과제 데이터 형식과 제출 규격에 맞게 재구성한 것이다.

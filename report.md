@@ -259,7 +259,7 @@ Gradient Boosting indoor positioning, feature augmentation과 boosting 기반 �
 본인이 직접 구현한 부분은 원본 RTT 거리값만 쓰는 것이 아니라 weighted centroid, RANSAC/WLS 위치, residual 통계값, 가까운 앵커 index 등을 추가 feature로 구성한 것이다.
 또한 실행 시간 제한을 고려하여 딥러닝 모델 대신 Gradient Boosting Regressor를 사용하였다.
 
-5.2 Reference를 바탕으로 한 본 프로젝트의 차별점
+# 5.2 Reference를 바탕으로 한 본 프로젝트의 차별점
 
 위 참고문헌들을 바탕으로 본 프로젝트의 최종 알고리즘은 다음과 같은 방향으로 정리된다.
 
